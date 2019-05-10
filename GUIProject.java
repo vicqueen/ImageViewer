@@ -87,7 +87,7 @@ public class GUIProject extends JFrame {
 	 */
 	public GUIProject() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 1050, 800);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -228,7 +228,6 @@ public class GUIProject extends JFrame {
 						    panel.add(scrollPane, BorderLayout.CENTER);
 						    
 						    setContentPane(panel);
-						    pack();
 						    setVisible(true);
 						    
 						    List<String> tags = new ArrayList<>();
@@ -395,7 +394,6 @@ public class GUIProject extends JFrame {
 	    panel.setLayout(new BorderLayout());
 	    panel.add(scrollPane, BorderLayout.CENTER);
 		setContentPane(scrollPane);
-	    pack();
 	    setVisible(true);
 	}
 }
