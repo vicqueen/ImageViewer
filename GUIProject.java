@@ -203,28 +203,12 @@ public class GUIProject extends JFrame {
 						        }
 						      };
 						    
-						    JButton button = new JButton("Filter");
-						    button.addActionListener(new ActionListener() {
-						      private boolean filter = true;
-						      @Override
-						      public void actionPerformed(ActionEvent arg0) {
-						        if (filter) {
-						          sorter.setRowFilter(letterFilter);
-						        }
-						        else {
-						          sorter.setRowFilter(null);
-						        }
-						        filter = !filter;
-						      }
-						    });
-						      
 						    JScrollPane scrollPane = new JScrollPane(table);
 						    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 						    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 						      
 						    JPanel panel = new JPanel();
 						    panel.setLayout(new BorderLayout());
-						    panel.add(button, BorderLayout.PAGE_START);
 						    panel.add(scrollPane, BorderLayout.CENTER);
 						    
 						    setContentPane(panel);
