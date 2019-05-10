@@ -190,19 +190,6 @@ public class GUIProject extends JFrame {
 						    sorter.setSortable(0, false);
 						    sorter.setSortable(4, false);
 						    
-						    RowFilter<TableModel, Integer> letterFilter = new RowFilter<TableModel, Integer>() {
-						        @Override
-						        public boolean include(Entry<? extends TableModel, ? extends Integer> entry) {
-						          int x = Integer.parseInt(entry.getStringValue(2));
-						          if (x > 21) {
-						            return true;
-						          }
-						          else {
-						            return false;
-						          }
-						        }
-						      };
-						    
 						    JScrollPane scrollPane = new JScrollPane(table);
 						    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 						    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
