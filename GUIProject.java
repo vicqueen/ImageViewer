@@ -330,12 +330,6 @@ public class GUIProject extends JFrame {
 		JMenu mnByPath = new JMenu("By Path");
 		mnSearch.add(mnByPath);
 		
-		JMenuItem mntmGreatestValue = new JMenuItem("Greatest Value");
-		mnByPath.add(mntmGreatestValue);
-		
-		JMenuItem mntmLeastValue = new JMenuItem("Least Value");
-		mnByPath.add(mntmLeastValue);
-		
 		JSplitPane splitPane_3 = new JSplitPane();
 		mnByPath.add(splitPane_3);
 		
@@ -345,6 +339,22 @@ public class GUIProject extends JFrame {
 		textField_3 = new JTextField();
 		textField_3.setColumns(10);
 		splitPane_3.setRightComponent(textField_3);
+		textField_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				List<ImageInfo> pathImages = new ArrayList<>();
+				
+				for (ImageInfo image : images)
+				{
+					if (textField_3.getText().trim().equals(image.path))
+						pathImages.add(image);
+				}
+				
+				String[] headers = {"Picture", "Description"};
+				Object[][] imageRows = new Object[pathImages.size()][2];
+				fillRowsWithImagesAndTheirDescriptions(imageRows, headers, pathImages);
+			}
+		});
 		
 		JMenu mnNewMenu_1 = new JMenu("By Author");
 		mnSearch.add(mnNewMenu_1);
@@ -365,6 +375,23 @@ public class GUIProject extends JFrame {
 		textField_4.setColumns(10);
 		splitPane_4.setRightComponent(textField_4);
 		
+		textField_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				List<ImageInfo> authorImages = new ArrayList<>();
+				
+				for (ImageInfo image : images)
+				{
+					if (textField_4.getText().trim().equals(image.author))
+						authorImages.add(image);
+				}
+				
+				String[] headers = {"Picture", "Description"};
+				Object[][] imageRows = new Object[authorImages.size()][2];
+				fillRowsWithImagesAndTheirDescriptions(imageRows, headers, authorImages);
+			}
+		});
+		
 		JMenu mnByLocation = new JMenu("By Location");
 		mnSearch.add(mnByLocation);
 		
@@ -383,6 +410,23 @@ public class GUIProject extends JFrame {
 		textField_2 = new JTextField();
 		splitPane_2.setRightComponent(textField_2);
 		textField_2.setColumns(10);
+		
+		textField_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				List<ImageInfo> locationImages = new ArrayList<>();
+				
+				for (ImageInfo image : images)
+				{
+					if (textField_2.getText().trim().equals(image.location))
+						locationImages.add(image);
+				}
+				
+				String[] headers = {"Picture", "Description"};
+				Object[][] imageRows = new Object[locationImages.size()][2];
+				fillRowsWithImagesAndTheirDescriptions(imageRows, headers, locationImages);
+			}
+		});
 		
 		JMenu mnByDate = new JMenu("By Date");
 		mnSearch.add(mnByDate);
@@ -403,6 +447,22 @@ public class GUIProject extends JFrame {
 		textField_5.setColumns(10);
 		splitPane_5.setRightComponent(textField_5);
 		
+		textField_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				List<ImageInfo> dateImages = new ArrayList<>();
+				
+				for (ImageInfo image : images)
+				{
+					if (textField_5.getText().trim().equals(image.date))
+						dateImages.add(image);
+				}
+				
+				String[] headers = {"Picture", "Description"};
+				Object[][] imageRows = new Object[dateImages.size()][2];
+				fillRowsWithImagesAndTheirDescriptions(imageRows, headers, dateImages);
+			}
+		});
 	}
 	
 	private void createAndShowImageDatabaseTable()
