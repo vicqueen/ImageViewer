@@ -25,7 +25,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JScrollPane;
@@ -58,6 +61,7 @@ import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import javax.swing.JList;
 import java.awt.Insets;
+import javax.swing.JSplitPane;
 
 public class GUIProject extends JFrame {
 
@@ -67,6 +71,12 @@ public class GUIProject extends JFrame {
 	private List<ImageInfo> images;
 	private String imageDatabasePath;
 	private JTable table_1;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
+	private JTextField textField_5;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -145,6 +155,12 @@ public class GUIProject extends JFrame {
 		mnDisplay.add(mnImageByInfo);
 		
 		JMenuItem mntmImageDatabase_1 = new JMenuItem("Image Database");
+		mntmImageDatabase_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				createAndShowImageDatabaseTable();
+			}
+		});
 		mnDisplay.add(mntmImageDatabase_1);
 		
 		mntmImageDatabase.addActionListener(new ActionListener() {
@@ -169,37 +185,7 @@ public class GUIProject extends JFrame {
 						{
 							mnNewMenu.removeAll();
 							mnImageByInfo.removeAll();
-							String[] headers = {"Path", "Author", "Location", "Date", "Tag"};
-						    int imagesNumber = images.size();
-							Object[][] content = new Object[imagesNumber][headers.length];
-						    
-						    for (int i = 0; i < imagesNumber; i++)
-						    {
-						    	content[i][0] = images.get(i).path;
-						    	content[i][1] = images.get(i).author;
-						    	content[i][2] = images.get(i).date;
-						    	content[i][3] = images.get(i).location;
-						    	content[i][4] = images.get(i).tag;
-						    }
-						      
-						    JTable table = new JTable(content, headers);
-						    table.setEnabled(false);
-						    
-						    TableRowSorter<TableModel> sorter  = new TableRowSorter<TableModel>(table.getModel());
-						    table.setRowSorter(sorter);
-						    sorter.setSortable(0, false);
-						    sorter.setSortable(4, false);
-						    
-						    JScrollPane scrollPane = new JScrollPane(table);
-						    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-						    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-						      
-						    JPanel panel = new JPanel();
-						    panel.setLayout(new BorderLayout());
-						    panel.add(scrollPane, BorderLayout.CENTER);
-						    
-						    setContentPane(panel);
-						    setVisible(true);
+							createAndShowImageDatabaseTable();
 						    
 						    List<String> tags = new ArrayList<>();
 						    
@@ -257,11 +243,89 @@ public class GUIProject extends JFrame {
 		JMenu mnImagesTaken = new JMenu("Images Taken");
 		mnSearch.add(mnImagesTaken);
 		
-		JMenuItem mntmEarlierThan = new JMenuItem("Earlier Than...");
-		mnImagesTaken.add(mntmEarlierThan);
+		JSplitPane splitPane = new JSplitPane();
+		mnImagesTaken.add(splitPane);
 		
-		JMenuItem mntmLaterThan = new JMenuItem("Later Than...");
-		mnImagesTaken.add(mntmLaterThan);
+		JLabel lblEarlierThan = new JLabel("Earlier Than...");
+		splitPane.setLeftComponent(lblEarlierThan);
+		
+		textField = new JTextField();
+		splitPane.setRightComponent(textField);
+		textField.setColumns(10);
+		textField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				try {
+					List<ImageInfo> earlierImages = new ArrayList<>();
+					
+					Date textFieldDate = new SimpleDateFormat("yyyy-MM-dd").parse(textField.getText());
+					
+					for (ImageInfo image : images)
+					{
+						if (!image.date.equals(""))
+						{
+							Date imageDate = new SimpleDateFormat("yyyy-MM-dd").parse(image.date);
+							
+							if (textFieldDate.compareTo(textFieldDate) < 0)
+								earlierImages.add(image);
+						}
+						
+						if (earlierImages.size() > 0)
+						{
+							String[] headers = {"Picture", "Description"};
+							Object[][] imagesRows = new Object[earlierImages.size()][2];
+							fillRowsWithImagesAndTheirDescriptions(imagesRows, headers, earlierImages);
+						}
+					}
+					
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		JSplitPane splitPane_1 = new JSplitPane();
+		mnImagesTaken.add(splitPane_1);
+		
+		JLabel lblLaterThan = new JLabel("Later Than...");
+		splitPane_1.setLeftComponent(lblLaterThan);
+		
+		textField_1 = new JTextField();
+		splitPane_1.setRightComponent(textField_1);
+		textField_1.setColumns(10);
+		textField_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				try {
+					List<ImageInfo> earlierImages = new ArrayList<>();
+					
+					Date textFieldDate = new SimpleDateFormat("yyyy-MM-dd").parse(textField.getText());
+					
+					for (ImageInfo image : images)
+					{
+						if (!image.date.equals(""))
+						{
+							Date imageDate = new SimpleDateFormat("yyyy-MM-dd").parse(image.date);
+							
+							if (textFieldDate.compareTo(textFieldDate) < 0)
+								earlierImages.add(image);
+						}
+						
+						if (earlierImages.size() < 0)
+						{
+							String[] headers = {"Picture", "Description"};
+							Object[][] imagesRows = new Object[earlierImages.size()][2];
+							fillRowsWithImagesAndTheirDescriptions(imagesRows, headers, earlierImages);
+						}
+					}
+					
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		
 		JMenu mnByPath = new JMenu("By Path");
 		mnSearch.add(mnByPath);
@@ -272,8 +336,15 @@ public class GUIProject extends JFrame {
 		JMenuItem mntmLeastValue = new JMenuItem("Least Value");
 		mnByPath.add(mntmLeastValue);
 		
-		JMenuItem mntmProvidedValue = new JMenuItem("Provided Value");
-		mnByPath.add(mntmProvidedValue);
+		JSplitPane splitPane_3 = new JSplitPane();
+		mnByPath.add(splitPane_3);
+		
+		JLabel label = new JLabel("Provided Value");
+		splitPane_3.setLeftComponent(label);
+		
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		splitPane_3.setRightComponent(textField_3);
 		
 		JMenu mnNewMenu_1 = new JMenu("By Author");
 		mnSearch.add(mnNewMenu_1);
@@ -284,8 +355,15 @@ public class GUIProject extends JFrame {
 		JMenuItem menuItem_1 = new JMenuItem("Least Value");
 		mnNewMenu_1.add(menuItem_1);
 		
-		JMenuItem menuItem_2 = new JMenuItem("Provided Value");
-		mnNewMenu_1.add(menuItem_2);
+		JSplitPane splitPane_4 = new JSplitPane();
+		mnNewMenu_1.add(splitPane_4);
+		
+		JLabel label_1 = new JLabel("Provided Value");
+		splitPane_4.setLeftComponent(label_1);
+		
+		textField_4 = new JTextField();
+		textField_4.setColumns(10);
+		splitPane_4.setRightComponent(textField_4);
 		
 		JMenu mnByLocation = new JMenu("By Location");
 		mnSearch.add(mnByLocation);
@@ -296,8 +374,15 @@ public class GUIProject extends JFrame {
 		JMenuItem menuItem_4 = new JMenuItem("Least Value");
 		mnByLocation.add(menuItem_4);
 		
-		JMenuItem menuItem_5 = new JMenuItem("Provided Value");
-		mnByLocation.add(menuItem_5);
+		JSplitPane splitPane_2 = new JSplitPane();
+		mnByLocation.add(splitPane_2);
+		
+		JLabel lblProvidedValue = new JLabel("Provided Value");
+		splitPane_2.setLeftComponent(lblProvidedValue);
+		
+		textField_2 = new JTextField();
+		splitPane_2.setRightComponent(textField_2);
+		textField_2.setColumns(10);
 		
 		JMenu mnByDate = new JMenu("By Date");
 		mnSearch.add(mnByDate);
@@ -308,9 +393,54 @@ public class GUIProject extends JFrame {
 		JMenuItem menuItem_7 = new JMenuItem("Least Value");
 		mnByDate.add(menuItem_7);
 		
-		JMenuItem menuItem_8 = new JMenuItem("Provided Value");
-		mnByDate.add(menuItem_8);
+		JSplitPane splitPane_5 = new JSplitPane();
+		mnByDate.add(splitPane_5);
 		
+		JLabel label_2 = new JLabel("Provided Value");
+		splitPane_5.setLeftComponent(label_2);
+		
+		textField_5 = new JTextField();
+		textField_5.setColumns(10);
+		splitPane_5.setRightComponent(textField_5);
+		
+	}
+	
+	private void createAndShowImageDatabaseTable()
+	{
+		if (images != null)
+		{
+			String[] headers = {"Path", "Author", "Location", "Date", "Tag"};
+		    int imagesNumber = images.size();
+			Object[][] content = new Object[imagesNumber][headers.length];
+		    
+		    for (int i = 0; i < imagesNumber; i++)
+		    {
+		    	content[i][0] = images.get(i).path;
+		    	content[i][1] = images.get(i).author;
+		    	content[i][2] = images.get(i).date;
+		    	content[i][3] = images.get(i).location;
+		    	content[i][4] = images.get(i).tag;
+		    }
+		      
+		    JTable table = new JTable(content, headers);
+		    table.setEnabled(false);
+		    
+		    TableRowSorter<TableModel> sorter  = new TableRowSorter<TableModel>(table.getModel());
+		    table.setRowSorter(sorter);
+		    sorter.setSortable(0, false);
+		    sorter.setSortable(4, false);
+		    
+		    JScrollPane scrollPane = new JScrollPane(table);
+		    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		      
+		    JPanel panel = new JPanel();
+		    panel.setLayout(new BorderLayout());
+		    panel.add(scrollPane, BorderLayout.CENTER);
+		    
+		    setContentPane(panel);
+		    setVisible(true);
+		}
 	}
 	
 	private void fillRowsWithImagesAndTheirDescriptions(Object[][] rows, String[] headers, List<ImageInfo> images)
