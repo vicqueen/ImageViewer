@@ -28,6 +28,8 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -130,6 +132,12 @@ public class GUIProject extends JFrame {
 		
 		JMenuItem mntmEdit = new JMenuItem("Edit");
 		mnLoad.add(mntmEdit);
+		mntmEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				
+			}
+		});
 		
 		JMenu mnDisplay = new JMenu("Display");
 		menuBar.add(mnDisplay);
@@ -361,9 +369,35 @@ public class GUIProject extends JFrame {
 		
 		JMenuItem menuItem = new JMenuItem("Greatest Value");
 		mnNewMenu_1.add(menuItem);
+		menuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				Comparator<ImageInfo> compareByAuthor = (ImageInfo i1, ImageInfo i2) -> i1.author.compareTo(i2.author);
+				List<ImageInfo> newImages = images;
+				Collections.sort(newImages, compareByAuthor.reversed());
+				List<ImageInfo> greatestImage = new ArrayList<>();
+				greatestImage.add(newImages.get(0));
+				
+				String[] headers = {"Picture", "Description"};
+				fillRowsWithImagesAndTheirDescriptions(new Object[greatestImage.size()][2], headers, greatestImage);
+			}
+		});
 		
 		JMenuItem menuItem_1 = new JMenuItem("Least Value");
 		mnNewMenu_1.add(menuItem_1);
+		menuItem_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				Comparator<ImageInfo> compareByAuthor = (ImageInfo i1, ImageInfo i2) -> i1.author.compareTo(i2.author);
+				List<ImageInfo> newImages = images;
+				Collections.sort(newImages, compareByAuthor);
+				List<ImageInfo> leastImage = new ArrayList<>();
+				leastImage.add(newImages.get(0));
+				
+				String[] headers = {"Picture", "Description"};
+				fillRowsWithImagesAndTheirDescriptions(new Object[leastImage.size()][2], headers, leastImage);
+			}
+		});
 		
 		JSplitPane splitPane_4 = new JSplitPane();
 		mnNewMenu_1.add(splitPane_4);
@@ -397,9 +431,35 @@ public class GUIProject extends JFrame {
 		
 		JMenuItem menuItem_3 = new JMenuItem("Greatest Value");
 		mnByLocation.add(menuItem_3);
+		menuItem_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				Comparator<ImageInfo> compareByLocation = (ImageInfo i1, ImageInfo i2) -> i1.location.compareTo(i2.location);
+				List<ImageInfo> newImages = images;
+				Collections.sort(newImages, compareByLocation.reversed());
+				List<ImageInfo> greatestImage = new ArrayList<>();
+				greatestImage.add(newImages.get(0));
+				
+				String[] headers = {"Picture", "Description"};
+				fillRowsWithImagesAndTheirDescriptions(new Object[greatestImage.size()][2], headers, greatestImage);
+			}
+		});
 		
 		JMenuItem menuItem_4 = new JMenuItem("Least Value");
 		mnByLocation.add(menuItem_4);
+		menuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				Comparator<ImageInfo> compareByLocation = (ImageInfo i1, ImageInfo i2) -> i1.location.compareTo(i2.location);
+				List<ImageInfo> newImages = images;
+				Collections.sort(newImages, compareByLocation);
+				List<ImageInfo> leastImage = new ArrayList<>();
+				leastImage.add(newImages.get(0));
+				
+				String[] headers = {"Picture", "Description"};
+				fillRowsWithImagesAndTheirDescriptions(new Object[leastImage.size()][2], headers, leastImage);
+			}
+		});
 		
 		JSplitPane splitPane_2 = new JSplitPane();
 		mnByLocation.add(splitPane_2);
@@ -433,9 +493,35 @@ public class GUIProject extends JFrame {
 		
 		JMenuItem menuItem_6 = new JMenuItem("Greatest Value");
 		mnByDate.add(menuItem_6);
+		menuItem_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				Comparator<ImageInfo> compareByDate = (ImageInfo i1, ImageInfo i2) -> i1.date.compareTo(i2.date);
+				List<ImageInfo> newImages = images;
+				Collections.sort(newImages, compareByDate.reversed());
+				List<ImageInfo> greatestImage = new ArrayList<>();
+				greatestImage.add(newImages.get(0));
+				
+				String[] headers = {"Picture", "Description"};
+				fillRowsWithImagesAndTheirDescriptions(new Object[greatestImage.size()][2], headers, greatestImage);
+			}
+		});
 		
 		JMenuItem menuItem_7 = new JMenuItem("Least Value");
 		mnByDate.add(menuItem_7);
+		menuItem_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				Comparator<ImageInfo> compareByDate = (ImageInfo i1, ImageInfo i2) -> i1.date.compareTo(i2.date);
+				List<ImageInfo> newImages = images;
+				Collections.sort(newImages, compareByDate);
+				List<ImageInfo> leastImage = new ArrayList<>();
+				leastImage.add(newImages.get(0));
+				
+				String[] headers = {"Picture", "Description"};
+				fillRowsWithImagesAndTheirDescriptions(new Object[leastImage.size()][2], headers, leastImage);
+			}
+		});
 		
 		JSplitPane splitPane_5 = new JSplitPane();
 		mnByDate.add(splitPane_5);
@@ -489,7 +575,7 @@ public class GUIProject extends JFrame {
 		    table.setRowSorter(sorter);
 		    sorter.setSortable(0, false);
 		    sorter.setSortable(4, false);
-		    
+
 		    JScrollPane scrollPane = new JScrollPane(table);
 		    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
