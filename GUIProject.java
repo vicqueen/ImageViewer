@@ -23,11 +23,14 @@ import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -36,6 +39,8 @@ import java.util.List;
 import javax.swing.JScrollPane;
 import java.awt.GridLayout;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
@@ -60,6 +65,7 @@ import javax.swing.ImageIcon;
 
 import java.awt.Button;
 import javax.swing.JButton;
+import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.JList;
 import java.awt.Insets;
@@ -79,6 +85,7 @@ public class GUIProject extends JFrame {
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JTextField textField_5;
+	private JButton finishedButton;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -132,12 +139,6 @@ public class GUIProject extends JFrame {
 		
 		JMenuItem mntmEdit = new JMenuItem("Edit");
 		mnLoad.add(mntmEdit);
-		mntmEdit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e)
-			{
-				
-			}
-		});
 		
 		JMenu mnDisplay = new JMenu("Display");
 		menuBar.add(mnDisplay);
@@ -170,6 +171,114 @@ public class GUIProject extends JFrame {
 			}
 		});
 		mnDisplay.add(mntmImageDatabase_1);
+		
+		mntmEdit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				JFrame editField = new JFrame();
+				JTextArea textArea = new JTextArea();
+				
+				if (!imageDatabasePath.equals(""))
+				{
+					try {
+						Files.readAllLines(new File(imageDatabasePath).toPath()).forEach(line -> {
+							textArea.setText(textArea.getText() + "\n" + line);
+						});
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+
+				JScrollPane scrollPane = new JScrollPane(textArea);
+				JPanel panel = new JPanel();
+				
+				panel.setLayout(new BorderLayout());
+				panel.add(scrollPane, BorderLayout.NORTH);
+				finishedButton = new JButton("Apply Changes");
+				finishedButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e)
+					{
+						List<String> lines = Arrays.asList(textArea.getText().split("\n"));
+						try {
+							Files.write(new File(imageDatabasePath).toPath(), lines, StandardCharsets.UTF_8);
+							ImageInfoBuilder imageBuilder = new ImageInfoBuilder();
+							images = new ArrayList<ImageInfo>();
+							try {
+								Files.readAllLines(Paths.get(imageDatabasePath)).forEach(line -> 
+								{
+									ImageInfo image = imageBuilder.BuildImage(line);
+									if (image != null)
+									{
+										images.add(image);
+									}
+								});
+								
+								if (images != null)
+								{
+									mnNewMenu.removeAll();
+									mnImageByInfo.removeAll();
+									createAndShowImageDatabaseTable();
+								    
+								    List<String> tags = new ArrayList<>();
+								    
+								    for (ImageInfo image : images)
+								    {
+								    	if (!tags.contains(image.tag))
+								    	{
+								    		tags.add(image.tag);
+								    		
+								    		JMenuItem tagMenuItem = new JMenuItem(image.tag);
+								    		mnNewMenu.add(tagMenuItem);
+								    		tagMenuItem.addActionListener(new ActionListener() {
+								    			public void actionPerformed(ActionEvent e){
+												    List<ImageInfo> imagesWithTag = new ArrayList<>();
+								    				
+								    				for (ImageInfo imageWithTag : images)
+								    					if (tagMenuItem.getText().equals(imageWithTag.tag))
+								    						imagesWithTag.add(imageWithTag);
+								    				
+								    				String[] imageHeaders = {"Picture", "Description"};
+								    				Object[][] imageRows = new Object[imagesWithTag.size()][2];
+								    				
+								    				fillRowsWithImagesAndTheirDescriptions(imageRows, imageHeaders, imagesWithTag);
+								    			}
+								    		});
+								    	}
+								    	JMenuItem imageMenuItem = new JMenuItem(image.path);
+								    	mnImageByInfo.add(imageMenuItem);
+								    	imageMenuItem.addActionListener(new ActionListener() {
+								    		public void actionPerformed(ActionEvent e)
+								    		{
+								    			List<ImageInfo> imagesWithPath = new ArrayList<>();
+								    			
+								    			String[] imageHeaders = {"Picture", "Description"};
+								    			Object[][] imageRows = new Object[1][2];
+								    			
+								    			imagesWithPath.add(image);
+								    			fillRowsWithImagesAndTheirDescriptions(imageRows, imageHeaders, imagesWithPath);
+								    		}
+								    	});
+								    }
+								}
+								
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				});
+				panel.add(finishedButton, BorderLayout.CENTER);
+				editField.setContentPane(panel);
+				
+				editField.pack();
+				editField.setVisible(true);
+			}
+		});
 		
 		mntmImageDatabase.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
