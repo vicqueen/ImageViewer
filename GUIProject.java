@@ -266,7 +266,7 @@ public class GUIProject extends JFrame {
 						{
 							Date imageDate = new SimpleDateFormat("yyyy-MM-dd").parse(image.date);
 							
-							if (textFieldDate.compareTo(textFieldDate) < 0)
+							if (textFieldDate.compareTo(imageDate) < 0)
 								earlierImages.add(image);
 						}
 						
@@ -300,7 +300,7 @@ public class GUIProject extends JFrame {
 				try {
 					List<ImageInfo> earlierImages = new ArrayList<>();
 					
-					Date textFieldDate = new SimpleDateFormat("yyyy-MM-dd").parse(textField.getText());
+					Date textFieldDate = new SimpleDateFormat("yyyy-MM-dd").parse(textField_1.getText());
 					
 					for (ImageInfo image : images)
 					{
@@ -308,11 +308,11 @@ public class GUIProject extends JFrame {
 						{
 							Date imageDate = new SimpleDateFormat("yyyy-MM-dd").parse(image.date);
 							
-							if (textFieldDate.compareTo(textFieldDate) < 0)
+							if (textFieldDate.compareTo(imageDate) < 0)
 								earlierImages.add(image);
 						}
 						
-						if (earlierImages.size() < 0)
+						if (earlierImages.size() > 0)
 						{
 							String[] headers = {"Picture", "Description"};
 							Object[][] imagesRows = new Object[earlierImages.size()][2];
@@ -451,8 +451,8 @@ public class GUIProject extends JFrame {
 			rows[i][0] = new ImageIcon(image.path);
 			rows[i][1] = image.path + ";\n"
 						+ image.author + ";\n"
+					    + image.date + ";\n"
 						+ image.location + ";\n"
-						+ image.date + ";\n"
 						+ image.tag;
 			i++;
 		}
