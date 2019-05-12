@@ -17,6 +17,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import javax.swing.JRadioButtonMenuItem;
 import java.awt.event.ContainerAdapter;
@@ -129,7 +130,7 @@ public class GUIProject extends JFrame {
 						
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						JOptionPane.showMessageDialog(new JFrame(), "Cannot find the specified file");
 					}
 				}
 			}
