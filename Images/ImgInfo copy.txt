@@ -1,0 +1,3 @@
+/Users/Wiktoria/Documents/PJATK/Images/Home/home2.jpg; Amal Clooney; Italy; 2018-08-01; home
+/Users/Wiktoria/Documents/PJATK/Images/Work/work.jpg; ; Greece; 2018-07-11; work
+/Users/Wiktoria/Documents/PJATK/Images/Work/work1.jpg; Kacper Pampam; United Kingdom; ; work
